@@ -22,7 +22,10 @@ namespace Game
             Shop shop = new Shop(rnd);
             Mountains marea = new Mountains();
             Village vill = new Village();
-            
+            Warriorspath war = new Warriorspath();
+            Hero hero = new Hero();
+            Secret end = new Secret();
+
             
 
             Console.WriteLine("heyyyyy");
@@ -56,7 +59,7 @@ namespace Game
                                     Console.WriteLine("no going back now");
                                     SaveData rewrite = new SaveData { Money = 100};
                                     SaveSystem.Save(rewrite);
-                                    RunGame(rewrite, rnd, tut, work, exp, inv, shop, marea, vill);
+                                    RunGame(rewrite, rnd, tut, work, exp, inv, shop, marea, vill,war,hero, end);
                                     break;
                                 }
                                 else if (yes == 2)
@@ -70,7 +73,7 @@ namespace Game
                         SaveData data = new SaveData { Money = 100 };
                         SaveSystem.Save(data);
 
-                        RunGame(data, rnd, tut, work, exp, inv, shop, marea, vill);
+                        RunGame(data, rnd, tut, work, exp, inv, shop, marea, vill,war,hero, end);
                         break;
                     }
 
@@ -84,7 +87,7 @@ namespace Game
                         }
 
                         SaveData data = SaveSystem.Load();
-                        RunGame(data, rnd, tut, work, exp, inv, shop, marea,vill);
+                        RunGame(data, rnd, tut, work, exp, inv, shop, marea,vill,war,hero, end);
                         break;
                     }
 
@@ -132,7 +135,7 @@ namespace Game
         }
         
         
-        static void RunGame(SaveData data, Random rnd, Tut tut, Work work, Explore exp, Inventory inv, Shop shop, Mountains marea, Village vill)
+        static void RunGame(SaveData data, Random rnd, Tut tut, Work work, Explore exp, Inventory inv, Shop shop, Mountains marea, Village vill, Warriorspath war, Hero hero, Secret end)
         {
             tut.runTut();
            
@@ -148,11 +151,10 @@ namespace Game
                 Console.WriteLine("[6] Inventory");
                 Console.WriteLine("[0] Save & Exit");
                 string input = Console.ReadLine();
-                int choice = int.Parse(input);
-                
-                if (input == null)
+                if (!int.TryParse(input, out int choice))
                 {
-                    Console.WriteLine("(:");
+                    Console.WriteLine("1-6");
+                    Console.ReadLine();
                     continue;
                 }
 
@@ -160,29 +162,37 @@ namespace Game
                 {
                   case 1:
                     Console.WriteLine("coming off strong");
-                    Thread.Sleep(3000);
+                    Console.WriteLine();
                     break;
                   case 2: 
                   Console.WriteLine("You dont have a job, lets get creative!");
-                  Thread.Sleep(3000);
+                    Console.ReadLine();
                   work.Runwork(data, rnd);
                   break;
                   case 3:
                      Console.WriteLine("I Like you");
-                     Thread.Sleep(3000);
+                     Console.WriteLine();
                      break;
                   case 4: 
                   Console.WriteLine("YAY! where we goin?");
-                  exp.RunExplore(data, marea, vill);
-                  Thread.Sleep(3000);
+                  Console.ReadLine();
+                  exp.RunExplore(data, marea, vill, war, hero);
                      break;
                   case 5: 
-                  Console.WriteLine("Lets do something secret");
-                  Thread.Sleep(3000);
+                  Console.WriteLine("Lets do something stupid");
+                  if (!data.Inventory.Contains(11))
+                  {
+                    Console.WriteLine("you need the nuclear submarine for this.");
+                    Console.WriteLine();
+                  }
+                  else
+                        {
+                            end.runSecret();
+                        }  
                      break;
                   case 6: 
                   Console.WriteLine("check yo pockets");
-                  Thread.Sleep(3000);
+                  Console.ReadLine();
                   inv.runInv(data, shop.ShopItems);
                      break;
                   case 0:
@@ -193,7 +203,7 @@ namespace Game
                      break;
                   default:
                   Console.WriteLine("pick 1-6");
-                  Thread.Sleep(3000);
+                  Console.WriteLine();
                   break; 
                 }
                 

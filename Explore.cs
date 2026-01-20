@@ -18,7 +18,7 @@ namespace Game
             rnd = random;
             shop = new Shop(rnd);
         }
-        public void RunExplore(SaveData data, Mountains marea, Village vill)
+        public void RunExplore(SaveData data, Mountains marea, Village vill, Warriorspath war, Hero hero)
         {
             
             
@@ -30,7 +30,8 @@ namespace Game
             Console.WriteLine("[4] Exit");
 
             string input = Console.ReadLine();
-            int choice = int.Parse(input);
+            if (!int.TryParse(input, out int choice))
+            {Console.WriteLine("number.");}
             switch (choice)
             {
                 case 1:                 
@@ -47,7 +48,7 @@ namespace Game
                 case 3:
 
                         Console.WriteLine("Its a scary place.");
-                        marea.runMountains(vill);
+                        marea.runMountains(vill, war, rnd, hero);
                         break;
 
                 case 4:

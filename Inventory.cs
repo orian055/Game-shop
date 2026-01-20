@@ -30,7 +30,7 @@ namespace Game
 
                 
             }
-            Thread.Sleep(3000);
+            Console.ReadLine();
         }
     } 
 }

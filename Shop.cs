@@ -9,13 +9,13 @@ namespace Game
     {
         public List<ShopItem> ShopItems { get; private set; }
         public Dictionary<int, (int Price, int Quantity)> Cart = new Dictionary<int, (int, int)>();
-
+    
         private Random rnd;
-
+    
         public Shop(Random random)
         {
             rnd = random;
-
+    
             ShopItems = new List<ShopItem>()
             {
                 new ShopItem(25, "basic sword", rnd, 1, "cheap, but does the job"),
@@ -30,10 +30,10 @@ namespace Game
                 new ShopItem(75, "op healing potion", rnd, 10, "can cure cancer"),
                 new ShopItem(200000, "nuclear submarine", rnd, 11, "dont let the goverment catch you"),
                 
-
+    
             };
         }
-
+    
         public void RunShop(SaveData data)
         {
             Console.WriteLine("skip intro? 1 - yes | 2 - no");

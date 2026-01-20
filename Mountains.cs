@@ -4,7 +4,7 @@ namespace Game
 {
     class Mountains
     {
-        public void runMountains(Village vill)
+        public void runMountains(Village vill, Warriorspath war, Random rnd, Hero hero)
         {
             Console.WriteLine("you arrive at the mountains...");
             Console.WriteLine("there are dragons flying around");
@@ -30,6 +30,7 @@ namespace Game
                 case 2:
                     
                         Console.WriteLine("Its a gate leading to some stairs");
+                        war.runWarrior(rnd, hero);
                         break;
                     
                 case 3:

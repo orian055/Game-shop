@@ -79,8 +79,11 @@ namespace Game
                     case 3:
                         Console.WriteLine("the baker is making a pizza");
                         Console.WriteLine("you: YOOO THIS LOOKS FIRE");
+                        Thread.Sleep(2500);
                         Console.WriteLine("village baker: merci beaucoup! you want a pizza too?");
+                        Thread.Sleep(2500);
                         Console.WriteLine("you: a pizza would be nice");
+                        Thread.Sleep(2500);
                         Console.WriteLine("village baker: aucun probleme!");
                         Thread.Sleep(2500);
                         Console.Clear();
