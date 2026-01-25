@@ -5,7 +5,7 @@ namespace Game
 {
     class Work
     {
-        public void Runwork(SaveData data, Random rnd)
+        public void Runwork(Hero hero, Random rnd)
         {
             Console.Clear();
             Console.WriteLine("=== MONEY ===");
@@ -19,17 +19,17 @@ namespace Game
             {
                 case 1:
                     {
-                        DoJob(data, rnd, "You scammed someone, he didnt notice.", 5, 100);
+                        DoJob(hero, rnd, "You scammed someone, he didnt notice.", 5, 100);
                         break;
                     }
                 case 2:
                     {
-                        DoJob(data, rnd, "You showed impressive skills, a crowd was cheering.", 5, 100);
+                        DoJob(hero, rnd, "You showed impressive skills, a crowd was cheering.", 5, 100);
                         break;
                     }
                 case 3:
                     {
-                        DoJob(data, rnd, "You posted some pics, people fell in love.", 5, 100);
+                        DoJob(hero, rnd, "You posted some pics, people fell in love.", 5, 100);
                         break;
                     }
                 case 4:
@@ -48,16 +48,16 @@ namespace Game
         
 
 
-    private void DoJob(SaveData data, Random rnd, string name, int minPay, int maxPay)
+    private void DoJob(Hero hero, Random rnd, string name, int minPay, int maxPay)
         {
             Console.WriteLine($"\n{name}.");
             Thread.Sleep(800);
 
             int earned = rnd.Next(minPay, maxPay + 1);
-            data.Money += earned;
+            hero.Money += earned;
 
             Console.WriteLine($"You made {earned}");
-            Console.WriteLine($"wallet: {data.Money}");
+            Console.WriteLine($"wallet: {hero.Money}");
 
             Thread.Sleep(1200);
             Console.WriteLine("\nPress Enter...");

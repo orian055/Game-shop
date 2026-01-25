@@ -4,7 +4,7 @@ namespace Game
 {
     class Menus
     {
-        public void RunMainMenu()
+        public void RunMainMenu(bool hasSave)
         {
             
 Console.WriteLine("╔══════════════════════════════╗");
@@ -14,9 +14,12 @@ Console.WriteLine("║             GAME             ║");
 Console.WriteLine("║           by Orian           ║");
 Console.WriteLine("╠══════════════════════════════╣");
 Console.WriteLine("║                              ║");
-Console.WriteLine("║   [1] START                  ║");
+Console.WriteLine("║   [1] START (Removes Save)   ║");
+if (hasSave)
 Console.WriteLine("║   [2] CONTINUE               ║");
-Console.WriteLine("║   [3] DELETE SAVE            ║");
+else
+Console.WriteLine("║   [2] CONTINUE (No Save)     ║");
+Console.WriteLine("║   [3] SAVE                   ║");
 Console.WriteLine("║   [4] TUTORIAL               ║");
 Console.WriteLine("║   [5] EXIT                   ║");
 Console.WriteLine("║                              ║");

@@ -4,6 +4,7 @@ using System.Net;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.IO;
 
 namespace Game
 {
@@ -14,131 +15,83 @@ namespace Game
             Random rnd = new Random();
             
             Menus menu = new Menus();
-
+            Hero hero = new Hero();
             Tut tut = new Tut();
             Work work = new Work();
             Inventory inv = new Inventory();
-            Explore exp = new Explore(rnd);
+            Town town = new Town();
+            Explore exp = new Explore(rnd, hero, town);
             Shop shop = new Shop(rnd);
             Mountains marea = new Mountains();
             Village vill = new Village();
             Warriorspath war = new Warriorspath();
-            Hero hero = new Hero();
             Secret end = new Secret();
-
-            
-
-            Console.WriteLine("heyyyyy");
-            Thread.Sleep(1000);
-            
-
-            while (true)
+            Save save = new Save();
+            Battle bat = new Battle();
+               
+            bool MMenu = true;
+            while (MMenu)
             {
-                Console.Clear();
-                menu.RunMainMenu();
+              Console.Clear();
+              bool canContinue = Save.SaveExists();
+              menu.RunMainMenu(canContinue);
 
-                if (!int.TryParse(Console.ReadLine(), out int choice))
-                    continue;
-
-                switch (choice)
-                {
-                    case 1:
-                    {
-                        if (SaveSystem.SaveExits())
-                            {
-                                Console.WriteLine("a save file already exists. rewrite it?  1 - yes | 2 - no");
-                                string rewite = Console.ReadLine();
-                                if (!int.TryParse(rewite, out int yes))
-                                {
-                                    Console.WriteLine("1 - yes | 2 - no");
-                                    Thread.Sleep(2500);
-                                    break;
-                                }
-                                else if (yes == 1)
-                                {
-                                    Console.WriteLine("no going back now");
-                                    SaveData rewrite = new SaveData { Money = 100};
-                                    SaveSystem.Save(rewrite);
-                                    RunGame(rewrite, rnd, tut, work, exp, inv, shop, marea, vill,war,hero, end);
-                                    break;
-                                }
-                                else if (yes == 2)
-                                {
-                                    Console.WriteLine("be carefull");
-                                    break;
-                                }
-
-                            }
-                        Console.WriteLine("lets get crazy");
-                        SaveData data = new SaveData { Money = 100 };
-                        SaveSystem.Save(data);
-
-                        RunGame(data, rnd, tut, work, exp, inv, shop, marea, vill,war,hero, end);
-                        break;
-                    }
-
-                    case 2:
-                    {
-                        if (!SaveSystem.SaveExits())
-                        {
-                            Console.WriteLine("No save file found...");
-                            Thread.Sleep(2500);
-                            break;
-                        }
-
-                        SaveData data = SaveSystem.Load();
-                        RunGame(data, rnd, tut, work, exp, inv, shop, marea,vill,war,hero, end);
-                        break;
-                    }
-
-                    case 3:
-                    {
-                        Console.WriteLine("are you sure? 1 - yes | 2 - no");
-                        if (!int.TryParse(Console.ReadLine(), out int sure))
-                        {
-                            Console.WriteLine("1 - yes | 2 - no");
-                            Thread.Sleep(2500);
-                            break;
-                        }
-
-                        if (sure == 1)
-                        {
-                            Console.WriteLine("A Fresh start, Good luck traveler.");
-                            SaveSystem.DeleteSave();
-                        }
-                        else if (sure == 2)
-                        {
-                            Console.WriteLine("Im glad");
-                        }
-
-                        Thread.Sleep(2500);
-                        break; 
-                    }
-                    case 4:
-                    {
-                        tut.runTut();
-                        break;
-                    }
-                    case 5:
-                    {
-                        Console.WriteLine("oof, ill miss you mate");
-                        Environment.Exit(0);
-                        break;
-                    }
-
-                    default:
-                        Console.WriteLine("Pick 1-5.");
-                        Thread.Sleep(2500);
-                        break;
-                }
+            string input = Console.ReadLine();
+            if (!int.TryParse(input, out int choice))
+            {
+                Console.WriteLine("Enter a number.");
             }
-        }
+
+            switch (choice)
+            {  
+             case 1: // START NEW GAME
+             hero = new Hero(); // Ensure we start freshswitch (choice)
+             RunGame(rnd, tut, work, exp, inv, shop, marea, vill, war, hero, end, town, bat);
+             break;
+
+             case 2:
+             if (canContinue)
+             {
+             hero = Save.LoadGame(); 
+             Console.WriteLine("Welcome back!");
+             Thread.Sleep(1000);
+             RunGame(rnd, tut, work, exp, inv, shop, marea, vill, war, hero, end, town,bat);
+             }
+             else
+            {
+              Console.WriteLine("\nNo save file. Start a new game");
+              Thread.Sleep(2500);
+            }
+             break;
+
+             case 3: // SAVE
+             save.SaveGame(hero);
+             Console.WriteLine("Progress saved. Press Enter...");
+             Console.ReadLine();
+             break;
+
+             case 4:
+             tut.runTut(hero);
+             break;
+    
+              case 5:
+              Environment.Exit(0);
+              break;
+
+              default:
+              Console.WriteLine("\n1-5");
+              Console.ReadLine();
+              break;
+            }
+            }
+
         
-        
-        static void RunGame(SaveData data, Random rnd, Tut tut, Work work, Explore exp, Inventory inv, Shop shop, Mountains marea, Village vill, Warriorspath war, Hero hero, Secret end)
+        static void RunGame(Random rnd, Tut tut, Work work, Explore exp, Inventory inv, Shop shop, Mountains marea, Village vill, Warriorspath war, Hero hero, Secret end, Town town, Battle bat)
         {
-            tut.runTut();
-           
+            if (!hero.passes.Contains("tutpassed"))
+            {
+            tut.runTut(hero);
+            }
            bool playing = true;
            while (playing)
             {
@@ -149,7 +102,11 @@ namespace Game
                 Console.WriteLine("[4] Explore");
                 Console.WriteLine("[5] ?");
                 Console.WriteLine("[6] Inventory");
-                Console.WriteLine("[0] Save & Exit");
+                Console.WriteLine("\nStats:");
+                Console.WriteLine($"Money: {hero.Money}");
+                Console.WriteLine($"Health: {hero.health}");
+                Console.WriteLine("\n[0] Exit To Main Menu");
+
                 string input = Console.ReadLine();
                 if (!int.TryParse(input, out int choice))
                 {
@@ -167,7 +124,7 @@ namespace Game
                   case 2: 
                   Console.WriteLine("You dont have a job, lets get creative!");
                     Console.ReadLine();
-                  work.Runwork(data, rnd);
+                  work.Runwork(hero, rnd);
                   break;
                   case 3:
                      Console.WriteLine("I Like you");
@@ -176,34 +133,33 @@ namespace Game
                   case 4: 
                   Console.WriteLine("YAY! where we goin?");
                   Console.ReadLine();
-                  exp.RunExplore(data, marea, vill, war, hero);
+                  exp.RunExplore(marea, vill, war, hero, town, bat);
                      break;
                   case 5: 
                   Console.WriteLine("Lets do something stupid");
-                  if (!data.Inventory.Contains(11))
+                  if (!hero.inv.Contains("nuclear submarine"))
                   {
                     Console.WriteLine("you need the nuclear submarine for this.");
                     Console.WriteLine();
                   }
                   else
                         {
-                            end.runSecret();
+                            end.runSecret(hero);
                         }  
                      break;
                   case 6: 
                   Console.WriteLine("check yo pockets");
+                  inv.runInv(hero);
                   Console.ReadLine();
-                  inv.runInv(data, shop.ShopItems);
                      break;
                   case 0:
                   Console.WriteLine("Ill be waiting for you");
-                  SaveSystem.Save(data);
                   playing = false;
                   Thread.Sleep(3000);
                      break;
                   default:
                   Console.WriteLine("pick 1-6");
-                  Console.WriteLine();
+                  Thread.Sleep(2500);
                   break; 
                 }
                 
@@ -212,4 +168,8 @@ namespace Game
         }
     }
 }
+}
 
+
+        
+       

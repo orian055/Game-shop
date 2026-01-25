@@ -7,7 +7,7 @@ namespace Game
 {
     class Village
     {
-        public void runVillage()
+        public void runVillage(Hero hero)
         {
             Console.Clear();
             Console.WriteLine("The village seems crowded.");
@@ -114,6 +114,41 @@ namespace Game
                         break;
 
                     case 5:
+                    if (hero.passes.Contains("wizqc"))
+                        {
+                            Console.WriteLine("village wizard: thanks for the za");
+                            Thread.Sleep(2500);
+                            break;
+                        }
+                    if (hero.passes.Contains("wizq"))
+                        {
+                            Console.WriteLine("village wizard: do you have my za?");
+                            Thread.Sleep(2500);
+                            if (hero.inv.Contains("za"))
+                            {
+                                Console.WriteLine("you: fuck yes");
+                                Thread.Sleep(2500);
+                                Console.WriteLine("village wizard: hell yeah my guy");
+                                Thread.Sleep(2500);
+                                hero.passes.Remove("wizq");
+                                hero.passes.Add("wizqc");
+                                Console.WriteLine("he showed you how to lethal shuffel");
+                                Console.ReadLine();
+                                hero.inv.Remove("za");
+                                hero.moves.Add("lethal shuffel");
+                                break;
+                            }
+                            else
+                            {
+                                Console.WriteLine("you: no");
+                                Thread.Sleep(2500);
+                                Console.WriteLine("village wizard: go get it from the dark ally in town");
+                                Console.ReadLine();
+                                break;
+                            }
+                        }
+                        else 
+                        {
                         Console.WriteLine("the wizard is yelling magic stuff.");
                         Thread.Sleep(2500);
                         Console.WriteLine("you: YO! your drugs fucked the priest up");
@@ -122,15 +157,16 @@ namespace Game
                         Thread.Sleep(2500);
                         Console.WriteLine("you: what?");
                         Thread.Sleep(2500);
-                        Console.WriteLine("village wizard: just take it idiot");
+                        Console.WriteLine("village wizard: Will you get me some more? me dealer is at the dark ally in the town");
                         Thread.Sleep(2500);
-                        Console.Clear();
-                        Console.WriteLine("you smoked some weed");
+                        Console.WriteLine("you: and what will i get from it?");
                         Thread.Sleep(2500);
-                        Console.WriteLine("it turned out to be laced");
+                        Console.WriteLine("village wizard: uhhhhhh i could teach you some moves");
                         Thread.Sleep(2500);
-                        Console.WriteLine("you feel like shit.");
+                        Console.WriteLine("you: bet.");
+                        hero.passes.Add("wizq");
                         Console.ReadLine();
+                        }
                         break;
 
                     case 6:

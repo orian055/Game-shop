@@ -34,7 +34,7 @@ namespace Game
             };
         }
     
-        public void RunShop(SaveData data)
+        public void RunShop(Hero hero)
         {
             Console.WriteLine("skip intro? 1 - yes | 2 - no");
 
@@ -259,20 +259,21 @@ namespace Game
             }
 
             Console.WriteLine("okay, now pay");
+            Console.ReadLine();
             int total = 0;
             foreach (var entry in Cart.Values)
              total += entry.Price * entry.Quantity;
 
-            if (data.Money < total)
+            if (hero.Money < total)
             {
-                Console.WriteLine($"Store owner: BROKE! you have {data.Money}. you need {total}");
-                Console.WriteLine();
+                Console.WriteLine($"Store owner: BROKE! you have {hero.Money}. you need {total}");
+                Console.ReadLine();
                 return;
             } 
 
-            data.Money -= total;
-            Console.WriteLine($"Store owner: thats {total}. | Money = {data.Money}");
-
+            hero.Money -= total;
+            Console.WriteLine($"Store owner: thats {total}. | Money = {hero.Money}");
+            Console.ReadLine();
             foreach (var entry in Cart)
             {
                 int id = entry.Key;
@@ -282,7 +283,7 @@ namespace Game
 
                 for (int i = 0; i < qty; i++)
                 {
-                    data.Inventory.Add(item.id);
+                    hero.inv.Add(item.name);
                 }
             }
          Cart.Clear();

@@ -23,7 +23,7 @@ namespace Game
             {
                 case 1:                 
                         Console.WriteLine("You spot a villag with some people inside");
-                        vill.runVillage();
+                        vill.runVillage(hero);
                         break;
                 
 

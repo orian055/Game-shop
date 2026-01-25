@@ -1,36 +1,33 @@
-using System.IO;
+using System;
 using System.Text.Json;
+using System.IO;
 
 namespace Game
 {
-    static class SaveSystem
+    public class Save
+{
+    public void SaveGame(Hero hero,string filename = "save.json")
     {
-        private const string SavePath = "save.json";
-
-        public static void Save(SaveData data)
-        {
-            var options = new JsonSerializerOptions
-            { WriteIndented = true };
-            string json = JsonSerializer.Serialize(data, options);
-            File.WriteAllText(SavePath, json);
-        }
-
-        public static SaveData Load()
-        {
-            if (!File.Exists(SavePath))
-            return new SaveData();
-
-            string json = File.ReadAllText(SavePath);
-            SaveData? data = JsonSerializer.Deserialize<SaveData>(json);
-            return data ?? new SaveData();
-        }
-
-        public static bool SaveExits() => File.Exists(SavePath);
-
-        public static void DeleteSave()
-        {
-            if (File.Exists(SavePath))
-            File.Delete(SavePath);
-        }
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string jsonString = JsonSerializer.Serialize(hero, options);
+        File.WriteAllText(filename, jsonString);
+        Console.WriteLine("Game Saved!");
+        Thread.Sleep(2500);
     }
+
+    public static Hero LoadGame(string filename = "save.json")
+    {
+        if (!File.Exists(filename)) return new Hero();
+        string jsonString = File.ReadAllText(filename);
+        return JsonSerializer.Deserialize<Hero>(jsonString) ?? new Hero();
+    }
+
+    public static bool SaveExists(string filename = "save.json")
+        {
+            return File.Exists(filename);
+        }
 }
+
+    
+}
+  

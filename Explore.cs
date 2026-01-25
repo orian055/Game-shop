@@ -8,17 +8,18 @@ namespace Game
         Random rnd;
 
         Shop shop;
-        Village vill;
+        
 
         
     
 
-        public Explore(Random random)
+        public Explore(Random random, Hero hero, Town town)
         {
             rnd = random;
             shop = new Shop(rnd);
+            
         }
-        public void RunExplore(SaveData data, Mountains marea, Village vill, Warriorspath war, Hero hero)
+        public void RunExplore( Mountains marea, Village vill, Warriorspath war, Hero hero, Town town, Battle bat)
         {
             
             
@@ -36,13 +37,13 @@ namespace Game
             {
                 case 1:                 
                         Console.WriteLine("Be carefull!");
-                        shop.RunShop(data);
+                        shop.RunShop(hero);
                         break;
                 
 
                 case 2:
                     
-                        Console.WriteLine("Coming soon!");
+                        town.runtown(hero, bat, rnd);
                         break;
                     
                 case 3:

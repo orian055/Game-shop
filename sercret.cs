@@ -5,8 +5,15 @@ namespace Game
 {
     class Secret
     {
-        public void runSecret()
+        public void runSecret(Hero hero)
         {
+            if (hero.inv.Contains("WW3"))
+            {
+                Console.WriteLine("You are NOT nuking russia again");
+                hero.inv.Remove("nuclear submarine");
+            }
+            else
+            {
             Console.WriteLine("yo");
             Console.ReadLine();
             Console.WriteLine("you can kill the dragon easily now");
@@ -17,11 +24,13 @@ namespace Game
             Console.ReadLine();
             Console.WriteLine("you declared war on russia...");
             Thread.Sleep(2500);
-            Console.WriteLine("a nuclear war started");
+            Console.WriteLine("a nuclear war almost started");
             Thread.Sleep(2500);
-            Console.WriteLine("the world has ended.");
+            Console.WriteLine("The goverment took you submarine");
             Console.ReadLine();
-            Environment.Exit(0);
+            hero.inv.Remove("nuclear submarine");
+            hero.passes.Add("WW3");
+            }
         }
     }
 }

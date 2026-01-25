@@ -2,13 +2,17 @@ using System;
 
 namespace Game
 {
-    public class Warriorspath
+    public class Battle
     {
-        public void runWarrior(Random rnd, Hero hero)
+        public void runbattle(Random rnd, Hero hero)
         {
-            if (!hero.passes.Contains("warrior"))
+            string loading = "...";
+            foreach (char c in loading)
             {
-            Console.WriteLine("some fuckass dude wants to fight");
+                Console.Write(c);
+                Thread.Sleep(2500);
+            }
+            Console.WriteLine("im gonna kick your ass");
             Console.ReadLine();
             int dragonhp = 5;
             int round = 1;
@@ -122,16 +126,7 @@ namespace Game
             }
             }
             }
-            }
-            else
-            {
-                Console.WriteLine("Awsome chinese sensei: ni hao");
-                Console.ReadLine();
-            }
+            
         }
     }
-}
-        
-        
-    
-    
+}        

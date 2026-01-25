@@ -4,7 +4,7 @@ namespace Game
 {
     class Tut
     {
-        public void runTut()
+        public void runTut(Hero hero)
         {
             Console.WriteLine("skip intro? 1 - yes | 2 - no");
 
@@ -63,7 +63,10 @@ namespace Game
         Console.WriteLine("and thats it");
         Thread.Sleep(3000);
         Console.WriteLine("take care traveler");
-        Thread.Sleep(3000);
+        if (!hero.passes.Contains("tutpassed"))
+        { 
+        hero.passes.Add("tutpassed");
+        }
         }
     }
 }
