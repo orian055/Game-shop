@@ -18,17 +18,12 @@ namespace Game
     
             ShopItems = new List<ShopItem>()
             {
-                new ShopItem(25, "basic sword", rnd, 1, "cheap, but does the job"),
-                new ShopItem(30, "basic bow", rnd, 2, "you might lose an eye using this"),
-                new ShopItem(10, "30 arrows", rnd, 3, "they work... kinda"),
-                new ShopItem(15, "small shied", rnd, 4, "can block an atomic bomb (probably)"),
-                new ShopItem(250, "cool hat", rnd, 5, "all the girls will want you"),
-                new ShopItem(5, "fuckass hat", rnd, 6, "no girl will want you"),
-                new ShopItem(150, "dragon sword", rnd, 7, "it kills dragons. what else do you need in a sword"),
-                new ShopItem(175, "sexy bow", rnd, 8, "it has flames and poison and blah blah blah"),
-                new ShopItem(25, "nice sandwich", rnd, 9, "my mom made it, its nice"),
-                new ShopItem(75, "op healing potion", rnd, 10, "can cure cancer"),
-                new ShopItem(200000, "nuclear submarine", rnd, 11, "dont let the goverment catch you"),
+                new ShopItem(25, "energy coffee", rnd, 1, "hot and refreshing. heals 5 health points."),
+                new ShopItem(25, "bandage", rnd, 2, "works. heals 2 health points"),
+                new ShopItem(50, "nice sandwich", rnd, 3, "my mom made it, its nice. heals 5 health points"),
+                new ShopItem(100, "op healing potion", rnd, 4, "can cure cancer. heals 20 health points"),
+                new ShopItem(150, "supreme elixir", rnd, 5, "legendary potion. heals 50 health points."),
+                new ShopItem(5000, "nuclear submarine", rnd, 6, "dont let the goverment catch you"),
                 
     
             };
@@ -36,53 +31,36 @@ namespace Game
     
         public void RunShop(Hero hero)
         {
-            Console.WriteLine("skip intro? 1 - yes | 2 - no");
-
-            int intro = 0;
-            bool valid = false;
-
-            while (!valid)
-            {
-                string input = Console.ReadLine();
-
-                if (int.TryParse(input, out intro) && (intro == 1 || intro == 2))
-                {
-                    valid = true;  
-                }
-                else
-                {
-                    Console.WriteLine("1 - YES | 2 - NO");
-                }
-            }
-
+            Console.Clear();
             
-            if (intro == 2)  
+            if (hero.passes.Exists(p => p.Name == "shop"))
+            Console.WriteLine("Store Owner: welcome back!");
+
+            else  
             {
-
-
                 Console.WriteLine("You are traveling in the forest");
                 Thread.Sleep(3000);
                 Console.WriteLine("suddenly you come across a strange store");
                 Thread.Sleep(3000);
-                Console.WriteLine("will you go inside? Y/N");
-                string start = Console.ReadLine().ToLower();
-                    if (start == "y")
+                Console.WriteLine("Will you go inside? [1] Yes | [2] No");
+                int start = ConsoleUtils.ReadInt("Choose: ");
+                if (start == 1)
                 {
-                    Console.WriteLine("yay");
-                    Thread.Sleep(3000);
+                    Console.WriteLine("Great!");
+                    Thread.Sleep(1000);
                 }
-                else if (start == "n")
+                else if (start == 2)
                 {
-                    Console.WriteLine("the owner kidnappes you to the store anyway");
-                    Thread.Sleep(3000);
+                    Console.WriteLine("The owner brings you to the store.");
+                    Thread.Sleep(1500);
                 }
                 else
                 {
-                    Console.WriteLine("what??? just go inside man");
-                    Thread.Sleep(3000);
+                    Console.WriteLine("You sense you should go inside.");
+                    Thread.Sleep(1000);
                 }
-                Console.WriteLine("you find yourself in the store, its a very comfy place");
-                Thread.Sleep(3000);
+                Console.WriteLine("You find yourself in the store—it's cozy and inviting.");
+                Thread.Sleep(1500);
                 Console.WriteLine("Store Owner: HELLO!");
                 Thread.Sleep(3000);
                 Console.WriteLine("Store Owner: Welcome to my store!");
@@ -101,56 +79,57 @@ namespace Game
                 Thread.Sleep(3000);
                 Console.WriteLine("Store Owner: then come take a look");
                 Thread.Sleep(3000);
+                hero.passes.Add(new Pass("shop"));
             }
             bool shopping = true;
             while (shopping)
             {
                 Console.Clear();
-                Console.WriteLine("=== STORE ===");
+                Console.WriteLine("╔════════════════════════════════════════╗");
+                Console.WriteLine("║           WELCOME TO THE STORE         ║");
+                Console.WriteLine("║      Where Dreams Come With a Price    ║");
+                Console.WriteLine("╚════════════════════════════════════════╝");
+                Console.WriteLine();
+                Console.WriteLine($"💰 Money: ${hero.Money}  │  ❤️  Health: {hero.health}/{hero.maxhp}");
+                Console.WriteLine();
                 
                 foreach (ShopItem item in ShopItems)
                 {
-                    Console.WriteLine($"{item.id}. {item.name} - {item.price}$ | {item.info} | {item.stock} left");
+                    Console.WriteLine($"[{item.id}] {item.sname,-20} ${item.price,5} | {item.info,-45} | {item.stock} left");
                 }
 
-                if (Cart.Count == 0)
+                int cartTotal = 0;
+                if (Cart.Count > 0)
                 {
-                    Console.WriteLine("\ngo ahead and add some items");
-                }
-                else
-                {
-                    int totalprice = 0;
-                    Console.WriteLine($"\ncart:");
-
+                    Console.WriteLine();
+                    Console.WriteLine("📦 Items in Cart:");
                     foreach (var entry in Cart)
                     {
                         int id = entry.Key;
                         int qty = entry.Value.Quantity;
                         int price = entry.Value.Price;
                         int sum = price * qty;
-                        totalprice += sum;
+                        cartTotal += sum;
 
                         ShopItem item = ShopItems.First(i => i.id == id);
-                        Console.WriteLine($"{id}. {item.name} x{qty} - {sum}$");
+                        Console.WriteLine($"   • {item.sname} x{qty} = ${sum}");
                     }
-
-                    Console.WriteLine($"\ntotal {totalprice}$");
+                    Console.WriteLine($"   Total: ${cartTotal}");
                 }
 
-                Console.WriteLine("\nstore owner: Stop staring at me... enter the item number or 0 to checkout: ");
-                string input = Console.ReadLine();
+                Console.WriteLine();
+                Console.WriteLine("Store Owner: What catches your eye? [Item#] or [0] to Review Cart");
+                string input = Console.ReadLine() ?? "";
 
                 if (!int.TryParse(input, out int choice))
                 {
-                    Console.WriteLine("store owner: numbers mann");
+                    Console.WriteLine("Store Owner: Use numbers, friend.");
                     Thread.Sleep(1500);
                     continue;
                 }
 
                 if (choice == 0)
                 {
-                    Console.WriteLine("store owner: checking out");
-                    Thread.Sleep(1500);
                     shopping = false;
                     break;
                 }
@@ -158,14 +137,14 @@ namespace Game
                 ShopItem selected = ShopItems.FirstOrDefault(i => i.id == choice);
                 if (selected == null)
                 {
-                    Console.WriteLine("store owner: What? try again");
+                    Console.WriteLine("Store Owner: Don't see that item, try again.");
                     Thread.Sleep(1500);
                     continue;
                 }
 
                 if (selected.stock <= 0)
                 {
-                    Console.WriteLine("store owner: dang it! out of stock");
+                    Console.WriteLine("Store Owner: Ah, sold out of that one. Try something else.");
                     Thread.Sleep(1500);
                     continue;
                 }
@@ -181,116 +160,178 @@ namespace Game
 
                 selected.stock--;
 
-                Console.WriteLine($"store owner: {selected.name} added to cart!");
+                Console.WriteLine($"Store Owner: Excellent choice! {selected.sname} added to your cart.");
                 Thread.Sleep(1500);
             }
 
-            Console.Clear();
-            Console.WriteLine("=== Cart ===");
-            foreach (var entry in Cart)
+            // Review cart and checkout
+            if (Cart.Count == 0)
             {
-                int id = entry.Key;
-                int price = entry.Value.Price;
-                int qty = entry.Value.Quantity;
-                int sum = price * qty;
-                ShopItem item = ShopItems.First(i => i.id == id);
-                Console.WriteLine($"-{item.name}. X{qty} | {sum}$");
+                Console.WriteLine("Store Owner: You didn't buy anything? Come back when you're ready.");
+                Thread.Sleep(2000);
+                return;
             }
 
-            Console.WriteLine("Do you want to cancel an item?");
-            int cancel = 1;
-            bool itemcancel = true;
-            while (itemcancel)
+            bool reviewing = true;
+            while (reviewing)
             {
-                Console.WriteLine("1 - yes | 2 - no");
-                string input = Console.ReadLine();
-                if (!int.TryParse(input, out cancel) && (cancel == 1|| cancel == 2))
-                {
-                    Console.WriteLine("1 - yes | 2 - no");
-                }
-                else
-                {
-                    itemcancel = false;
-                }
-                
-            }
-            if (cancel == 1)
-            {
-                bool canceling = true;
-                while (canceling)
-                {
                 Console.Clear();
+                Console.WriteLine("╔════════════════════════════════════════╗");
+                Console.WriteLine("║            YOUR CART                   ║");
+                Console.WriteLine("║        Ready to Proceed?               ║");
+                Console.WriteLine("╚════════════════════════════════════════╝");
+                Console.WriteLine();
+                Console.WriteLine($"💰 Your Gold: ${hero.Money}");
+                Console.WriteLine();
+
+                int total = 0;
                 foreach (var entry in Cart)
                 {
-                    int ids = entry.Key;
+                    int id = entry.Key;
                     int price = entry.Value.Price;
                     int qty = entry.Value.Quantity;
                     int sum = price * qty;
-                    ShopItem item = ShopItems.First(i => i.id == ids);
-                    Console.WriteLine($"{ids}. -{item.name} X{qty}| {price}$");
+                    total += sum;
+                    ShopItem item = ShopItems.First(i => i.id == id);
+                    Console.WriteLine($"  • {item.sname} x{qty,-2} = ${sum}");
                 }
-                Console.WriteLine("\nEnter the item number to cancel or 0 to exit");
-                string cancelid = Console.ReadLine();
-                if (!int.TryParse(cancelid, out int id))
-                    {
-                        Console.WriteLine("Item number.");
-                        continue;
-                    }
-                if (id == 0)
-                    {
-                        canceling = false;
-                    }
 
-                else if (!Cart.ContainsKey(id))
-                    {
-                        Console.WriteLine("try again");
-                        continue;
-                    }    
-                else
-                    {
-                        Cart[id] = (Cart[id].Price, Cart[id].Quantity - 1);
-                        if (Cart[id].Quantity <= 0)
-                        {
-                            Cart.Remove(id);
-                        }
-                    }
-
-                }
-            }
-
-            Console.WriteLine("okay, now pay");
-            Console.ReadLine();
-            int total = 0;
-            foreach (var entry in Cart.Values)
-             total += entry.Price * entry.Quantity;
-
-            if (hero.Money < total)
-            {
-                Console.WriteLine($"Store owner: BROKE! you have {hero.Money}. you need {total}");
-                Console.ReadLine();
-                return;
-            } 
-
-            hero.Money -= total;
-            Console.WriteLine($"Store owner: thats {total}. | Money = {hero.Money}");
-            Console.ReadLine();
-            foreach (var entry in Cart)
-            {
-                int id = entry.Key;
-                int qty = entry.Value.Quantity;
-
-                ShopItem item = ShopItems.First(i => i.id == id);
-
-                for (int i = 0; i < qty; i++)
+                Console.WriteLine();
+                Console.WriteLine($"Total Cost: ${total}");
+                
+                if (hero.Money < total)
                 {
-                    hero.inv.Add(item.name);
+                    Console.WriteLine($"⚠️  You're a bit short... (need ${total - hero.Money} more)");
+                }
+
+                Console.WriteLine();
+                Console.WriteLine("[1] Continue Shopping    [2] Modify Cart    [3] Complete Purchase");
+                int action = ConsoleUtils.ReadInt("What would you like to do? ");
+
+                switch (action)
+                {
+                    case 1:
+                        reviewing = false;
+                        shopping = true;
+                        break;
+                    case 2:
+                        ModifyCart();
+                        break;
+                    case 3:
+                        if (hero.Money >= total)
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine("Store Owner: Perfect! Let's complete this transaction.");
+                            Thread.Sleep(1500);
+                            hero.Money -= total;
+                            Console.WriteLine($"Store Owner: That's ${total}. You now have ${hero.Money} remaining.");
+                            Thread.Sleep(1500);
+
+                            foreach (var entry in Cart)
+                            {
+                                int id = entry.Key;
+                                int qty = entry.Value.Quantity;
+
+                                ShopItem item = ShopItems.First(i => i.id == id);
+
+                                for (int i = 0; i < qty; i++)
+                                {
+                                    hero.inv.Add(new Item(item.sname, ItemType.Consumable, hero.itemstat(item.sname)));
+                                }
+                            }
+
+                            Console.WriteLine("Store Owner: Much obliged! Come again soon.");
+                            Thread.Sleep(2000);
+                            Cart.Clear();
+                            reviewing = false;
+                            shopping = false;
+                        }
+                        else
+                        {
+                            Console.WriteLine();
+                            Console.WriteLine($"Store Owner: You're short by ${total - hero.Money}. Would you like to remove some items?");
+                            Thread.Sleep(2000);
+                        }
+                        break;
+                    default:
+                        Console.WriteLine("Store Owner: I didn't catch that...");
+                        Thread.Sleep(1000);
+                        break;
                 }
             }
-         Cart.Clear();
 
+            void ModifyCart()
+            {
+                bool modifying = true;
+                while (modifying)
+                {
+                    Console.Clear();
+                    Console.WriteLine("╔════════════════════════════════════════╗");
+                    Console.WriteLine("║        MODIFY YOUR CART                ║");
+                    Console.WriteLine("╚════════════════════════════════════════╝");
+                    Console.WriteLine();
 
-           
+                    if (Cart.Count == 0)
+                    {
+                        Console.WriteLine("Your cart is empty.");
+                        Thread.Sleep(1500);
+                        modifying = false;
+                        break;
+                    }
 
+                    int totalPrice = 0;
+                    foreach (var entry in Cart)
+                    {
+                        int id = entry.Key;
+                        int price = entry.Value.Price;
+                        int qty = entry.Value.Quantity;
+                        int sum = price * qty;
+                        totalPrice += sum;
+                        ShopItem item = ShopItems.First(i => i.id == id);
+                        Console.WriteLine($"[{id}] {item.sname} x{qty,-2} = ${sum}");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine($"Total: ${totalPrice}");
+                    Console.WriteLine();
+                    Console.WriteLine("Enter item number to remove, or [0] to go back:");
+                    string input = Console.ReadLine() ?? "";
+
+                    if (!int.TryParse(input, out int removeId))
+                    {
+                        Console.WriteLine("Store Owner: Use numbers, friend.");
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
+                    if (removeId == 0)
+                    {
+                        modifying = false;
+                        break;
+                    }
+
+                    if (!Cart.ContainsKey(removeId))
+                    {
+                        Console.WriteLine("Store Owner: That item isn't in your cart.");
+                        Thread.Sleep(1000);
+                        continue;
+                    }
+
+                    Cart[removeId] = (Cart[removeId].Price, Cart[removeId].Quantity - 1);
+                    if (Cart[removeId].Quantity <= 0)
+                    {
+                        Cart.Remove(removeId);
+                        ShopItem removedItem = ShopItems.First(i => i.id == removeId);
+                        Console.WriteLine($"Store Owner: Removed {removedItem.sname} from your cart.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Store Owner: Quantity reduced.");
+                    }
+
+                    Thread.Sleep(1500);
+                }
+            }
         }
     }
 }

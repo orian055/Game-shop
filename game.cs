@@ -28,7 +28,12 @@ namespace Game
             Secret end = new Secret();
             Save save = new Save();
             Battle bat = new Battle();
-               
+            Train david = new Train();
+            Gamble gamble = new Gamble();
+            Finals final = new Finals();
+            ModMenu modMenu = new ModMenu();
+            QuestLog questLog = new QuestLog();
+
             bool MMenu = true;
             while (MMenu)
             {
@@ -36,111 +41,97 @@ namespace Game
               bool canContinue = Save.SaveExists();
               menu.RunMainMenu(canContinue);
 
-            string input = Console.ReadLine();
-            if (!int.TryParse(input, out int choice))
-            {
-                Console.WriteLine("Enter a number.");
-            }
+              int choice = ConsoleUtils.ReadInt("Select an option: ");
 
-            switch (choice)
-            {  
-             case 1: // START NEW GAME
-             hero = new Hero(); // Ensure we start freshswitch (choice)
-             RunGame(rnd, tut, work, exp, inv, shop, marea, vill, war, hero, end, town, bat);
-             break;
+              switch (choice)
+              {
+                case 1: // START NEW GAME
+                  hero = new Hero(); // Ensure we start fresh
+                  RunGame(rnd, tut, work, exp, inv, shop, marea, vill, war, hero, end, town, bat, david, gamble, save, final, questLog, modMenu);
+                  break;
 
-             case 2:
-             if (canContinue)
-             {
-             hero = Save.LoadGame(); 
-             Console.WriteLine("Welcome back!");
-             Thread.Sleep(1000);
-             RunGame(rnd, tut, work, exp, inv, shop, marea, vill, war, hero, end, town,bat);
-             }
-             else
-            {
-              Console.WriteLine("\nNo save file. Start a new game");
-              Thread.Sleep(2500);
-            }
-             break;
+                case 2: // LOAD
+                  if (canContinue)
+                  {
+                    hero = Save.LoadGame();
+                    Console.WriteLine("Welcome back!");
+                    Thread.Sleep(1000);
+                    RunGame(rnd, tut, work, exp, inv, shop, marea, vill, war, hero, end, town, bat, david, gamble, save, final, questLog, modMenu);
+                  }
+                  else
+                  {
+                    Console.WriteLine("\nNo save file. Start a new game");
+                    Thread.Sleep(2500);
+                  }
+                  break;
 
-             case 3: // SAVE
-             save.SaveGame(hero);
-             Console.WriteLine("Progress saved. Press Enter...");
-             Console.ReadLine();
-             break;
+                case 3: // SAVE
+                  save.SaveGame(hero);
+                  Console.WriteLine("Progress saved.");
+                  ConsoleUtils.Pause();
+                  break;
 
-             case 4:
-             tut.runTut(hero);
-             break;
-    
-              case 5:
-              Environment.Exit(0);
-              break;
+                case 4: // TUTORIAL
+                  tut.runTut(hero);
+                  break;
 
-              default:
-              Console.WriteLine("\n1-5");
-              Console.ReadLine();
-              break;
-            }
+                case 5: // EXIT
+                  Environment.Exit(0);
+                  break;
+
+                case 6: // MOD MENU (hidden, needs password)
+                  modMenu.Run(hero);
+                  break;
+
+                default:
+                  Console.WriteLine("Enter a number between 1 and 5.");
+                  Thread.Sleep(1500);
+                  break;
+              }
             }
 
         
-        static void RunGame(Random rnd, Tut tut, Work work, Explore exp, Inventory inv, Shop shop, Mountains marea, Village vill, Warriorspath war, Hero hero, Secret end, Town town, Battle bat)
+        static void RunGame(Random rnd, Tut tut, Work work, Explore exp, Inventory inv, Shop shop, Mountains marea, Village vill, Warriorspath war, Hero hero, Secret end, Town town, Battle bat, Train david, Gamble gamble, Save save, Finals final, QuestLog questLog, ModMenu modMenu)
         {
-            if (!hero.passes.Contains("tutpassed"))
+            if (!hero.passes.Exists(p => p.Name == "tutpassed"))
             {
             tut.runTut(hero);
             }
            bool playing = true;
            while (playing)
             {
-                Console.Clear();
-                Console.WriteLine("[1] Train");
-                Console.WriteLine("[2] Work");
-                Console.WriteLine("[3] Gamble");
-                Console.WriteLine("[4] Explore");
-                Console.WriteLine("[5] ?");
-                Console.WriteLine("[6] Inventory");
-                Console.WriteLine("\nStats:");
-                Console.WriteLine($"Money: {hero.Money}");
-                Console.WriteLine($"Health: {hero.health}");
-                Console.WriteLine("\n[0] Exit To Main Menu");
+              Console.Clear();
+              Console.WriteLine("╔═══════════════════════════════════════╗");
+              Console.WriteLine("║       What will you do?               ║");
+              Console.WriteLine("╚═══════════════════════════════════════╝");
+              Console.WriteLine("[1] Train      [2] Work      [3] Gamble");
+              Console.WriteLine("[4] Explore    [5] ?         [6] Inventory");
+              Console.WriteLine("[7] Quest Log  [8] ModMenu");
+              Console.WriteLine();
+              Console.WriteLine($"Money: ${hero.Money}  Health: {hero.health}/{hero.maxhp}  Damage: {hero.dmg}");
+              Console.WriteLine("[0] Exit To Main Menu");
 
-                string input = Console.ReadLine();
-                if (!int.TryParse(input, out int choice))
-                {
-                    Console.WriteLine("1-6");
-                    Console.ReadLine();
-                    continue;
-                }
+              int choice = ConsoleUtils.ReadInt("Choose an action: ");
 
-                switch(choice)
+              switch (choice)
                 {
                   case 1:
-                    Console.WriteLine("coming off strong");
-                    Console.WriteLine();
-                    break;
+                  david.runtrain(hero);  
+                  break;
                   case 2: 
-                  Console.WriteLine("You dont have a job, lets get creative!");
-                    Console.ReadLine();
                   work.Runwork(hero, rnd);
                   break;
                   case 3:
-                     Console.WriteLine("I Like you");
-                     Console.WriteLine();
-                     break;
+                  gamble.letsgogambling(hero, rnd);
+                  break;
                   case 4: 
-                  Console.WriteLine("YAY! where we goin?");
-                  Console.ReadLine();
-                  exp.RunExplore(marea, vill, war, hero, town, bat);
-                     break;
+                  exp.RunExplore(marea, vill, war, hero, town, bat, save, final);
+                  break;
                   case 5: 
-                  Console.WriteLine("Lets do something stupid");
-                  if (!hero.inv.Contains("nuclear submarine"))
+                  if (!hero.inv.Exists(i => i.Name == "nuclear submarine"))
                   {
                     Console.WriteLine("you need the nuclear submarine for this.");
-                    Console.WriteLine();
+                    Thread.Sleep(2500);
                   }
                   else
                         {
@@ -148,26 +139,29 @@ namespace Game
                         }  
                      break;
                   case 6: 
-                  Console.WriteLine("check yo pockets");
                   inv.runInv(hero);
-                  Console.ReadLine();
+                     break;
+                  case 7:
+                  questLog.DisplayCompact(hero);
+                     break;
+                  case 8:
+                  modMenu.Run(hero);
                      break;
                   case 0:
-                  Console.WriteLine("Ill be waiting for you");
                   playing = false;
-                  Thread.Sleep(3000);
                      break;
                   default:
-                  Console.WriteLine("pick 1-6");
-                  Thread.Sleep(2500);
-                  break; 
+                    Console.WriteLine("Pick a valid option.");
+                    Thread.Sleep(1000);
+                    break; 
                 }
                 
             }
             
         }
+
+        }
     }
-}
 }
 
 

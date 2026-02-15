@@ -4,51 +4,64 @@ namespace Game
 {
     class Mountains
     {
-        public void runMountains(Village vill, Warriorspath war, Random rnd, Hero hero)
+        public void runMountains(Village vill, Warriorspath war, Random rnd, Hero hero, Battle bat, Finals final)
         {
-            Console.WriteLine("you arrive at the mountains...");
-            Console.WriteLine("there are dragons flying around");
-            
-            
+            bool mountains = true;
+            while (mountains)
+            {
             Console.Clear();
-            Console.WriteLine("=== Mountains ===");
-            Console.WriteLine("[1] Village");
-            Console.WriteLine("[2] Warrior's path");
-            Console.WriteLine("[3] Mountain top (final boss)");
-            Console.WriteLine("[4] Go back");
+            Console.WriteLine("╔═════════════════════════════════════════╗");
+            Console.WriteLine("║         MOUNTAINS - WHERE LEGENDS       ║");
+            Console.WriteLine("║             COME TO FIGHT               ║");
+            Console.WriteLine("╚═════════════════════════════════════════╝");
+            Console.WriteLine();
+            Console.WriteLine("[1] Village         - Seek guidance from NPCs");
+            Console.WriteLine("[2] Warrior's Path  - Prove your combat skill");
+            Console.WriteLine("[3] Mountain Top    - Face the final challenge");
+            Console.WriteLine();
+            Console.WriteLine("[4] Turn back");
 
-            string input = Console.ReadLine();
-            int choice = int.Parse(input);
+            int choice = ConsoleUtils.ReadInt("What calls to you? ");
             switch (choice)
             {
-                case 1:                 
-                        Console.WriteLine("You spot a villag with some people inside");
-                        vill.runVillage(hero);
-                        break;
+                case 1:
+                    Console.WriteLine();
+                    Console.WriteLine("You spot a small village nestled in the mountains...");
+                    Console.WriteLine("Smoke rises from chimneys, and you hear distant voices.");
+                    Thread.Sleep(1500);
+                    vill.runVillage(hero);
+                    break;
                 
 
                 case 2:
-                    
-                        Console.WriteLine("Its a gate leading to some stairs");
-                        war.runWarrior(rnd, hero);
-                        break;
+                    Console.WriteLine();
+                    Console.WriteLine("You approach a narrow stone path lined with ancient runes...");
+                    Console.WriteLine("The air crackles with power. A voice echoes: 'Welcome, warrior.'");
+                    Thread.Sleep(1500);
+                    war.runWarrior(rnd, hero, bat);
+                    break;
                     
                 case 3:
-
-                        Console.WriteLine("The dragon can be seen sitting there, waiting for opponent");
-                        break;
+                    Console.WriteLine();
+                    Console.WriteLine("You climb higher and higher through the clouds...");
+                    Console.WriteLine("At the peak, a shadow moves. Your destiny awaits.");
+                    Thread.Sleep(1500);
+                    final.finals(hero, rnd);
+                    break;
 
                 case 4:
-
-                        break;
+                    Console.WriteLine("You carefully descend back down the mountain...");
+                    Thread.Sleep(1000);
+                    mountains = false;
+                    break;
 
                 default:
-
-                         Console.WriteLine("1-4");
-                         break;                 
+                    Console.WriteLine("The mountain wind howls, as if mocking your indecision.");
+                    Thread.Sleep(1000);
+                    break;                 
             }
 
-        
+            }
         }
 
         

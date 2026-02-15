@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Threading;
 
 namespace Game
 {
@@ -19,47 +20,60 @@ namespace Game
             shop = new Shop(rnd);
             
         }
-        public void RunExplore( Mountains marea, Village vill, Warriorspath war, Hero hero, Town town, Battle bat)
+        public void RunExplore( Mountains marea, Village vill, Warriorspath war, Hero hero, Town town, Battle bat, Save save, Finals final)
         {
             
-            
+            bool Explore = true;
+            while (Explore)
+            {
             Console.Clear();
-            Console.WriteLine("=== Explore ===");
-            Console.WriteLine("[1] Forest");
-            Console.WriteLine("[2] Town");
-            Console.WriteLine("[3] Mountains");
+            Console.WriteLine("╔═══════════════════════════════════════╗");
+            Console.WriteLine("║          EXPLORE THE WORLD            ║");
+            Console.WriteLine("╚═══════════════════════════════════════╝");
+            Console.WriteLine();
+            Console.WriteLine("[1] Forest        - Mystical and uncertain");
+            Console.WriteLine("[2] Town          - Bustling with life");
+            Console.WriteLine("[3] Mountains     - Towering and dangerous");
+            Console.WriteLine();
             Console.WriteLine("[4] Exit");
 
-            string input = Console.ReadLine();
-            if (!int.TryParse(input, out int choice))
-            {Console.WriteLine("number.");}
+            int choice = ConsoleUtils.ReadInt("Where will you go? ");
             switch (choice)
             {
-                case 1:                 
-                        Console.WriteLine("Be carefull!");
-                        shop.RunShop(hero);
-                        break;
+                case 1:
+                    Console.WriteLine();
+                    Console.WriteLine("You venture into the deep forest...");
+                    Console.WriteLine("The trees grow denser, the air grows colder.");
+                    Thread.Sleep(1500);
+                    shop.RunShop(hero);
+                    break;
                 
 
                 case 2:
-                    
-                        town.runtown(hero, bat, rnd);
-                        break;
+                    Console.WriteLine();
+                    Console.WriteLine("You approach the familiar town gates...");
+                    Console.WriteLine("The smell of food and the sounds of life fill the air.");
+                    Thread.Sleep(1500);
+                    town.runtown(hero, bat, rnd, save);
+                    break;
                     
                 case 3:
-
-                        Console.WriteLine("Its a scary place.");
-                        marea.runMountains(vill, war, rnd, hero);
-                        break;
+                    Console.WriteLine();
+                    Console.WriteLine("You gaze up at the towering mountains ahead...");
+                    Console.WriteLine("The peaks seem to touch the sky itself.");
+                    Thread.Sleep(1500);
+                    marea.runMountains(vill, war, rnd, hero, bat, final);
+                    break;
 
                 case 4:
-
-                        break;
+                    Explore = false;
+                    break;
 
                 default:
-
-                         Console.WriteLine("1-4");
-                         break;                 
+                    Console.WriteLine("That's not a valid destination.");
+                    Thread.Sleep(1000);
+                    break;                 
+            }
             }
 
         }

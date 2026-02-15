@@ -1,0 +1,9 @@
+{
+    "chat.customAgentInSubagent.enabled": true,
+    "chat.useAgentSkills": true,
+    "chat.useNestedAgentsMdFiles": true,
+    "inlineChat.notebookAgent": true,
+    "geminicodeassist.agentDebugMode": false,
+    "geminicodeassist.agentYoloMode": true,
+    "accessibility.openChatEditedFiles": true
+}

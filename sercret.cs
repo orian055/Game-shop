@@ -7,10 +7,10 @@ namespace Game
     {
         public void runSecret(Hero hero)
         {
-            if (hero.inv.Contains("WW3"))
+            if (hero.inv.Exists(i => i.Name == "WW3"))
             {
-                Console.WriteLine("You are NOT nuking russia again");
-                hero.inv.Remove("nuclear submarine");
+                Console.WriteLine("Govermnet: You are NOT declaring war on russia again");
+                hero.inv.RemoveAll(i => i.Name == "nuclear submarine");
             }
             else
             {
@@ -28,8 +28,8 @@ namespace Game
             Thread.Sleep(2500);
             Console.WriteLine("The goverment took you submarine");
             Console.ReadLine();
-            hero.inv.Remove("nuclear submarine");
-            hero.passes.Add("WW3");
+            hero.inv.RemoveAll(i => i.Name == "nuclear submarine");
+            hero.passes.Add(new Pass("WW3"));
             }
         }
     }
