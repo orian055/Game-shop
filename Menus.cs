@@ -14,7 +14,7 @@ Console.WriteLine("║             GAME             ║");
 Console.WriteLine("║           by Orian           ║");
 Console.WriteLine("╠══════════════════════════════╣");
 Console.WriteLine("║                              ║");
-Console.WriteLine("║   [1] START (Removes Save)   ║");
+Console.WriteLine("║   [1] START (New Save)       ║");
 if (hasSave)
 Console.WriteLine("║   [2] CONTINUE               ║");
 else

@@ -8,38 +8,37 @@ namespace Game
         public void Runwork(Hero hero, Random rnd)
         {
             Console.Clear();
-            Console.WriteLine("=== MONEY ===");
-            Console.WriteLine("[1] Scam people (Indian style)");
-            Console.WriteLine("[2] Play guitar on the street");
-            Console.WriteLine("[3] Post on onlyfans");
-            Console.WriteLine("[4] Exit");
-            if (!int.TryParse(Console.ReadLine(), out int choice))
-               return;
+            Console.WriteLine("=== Work ===");
+            Console.WriteLine("[1] Con someone      [2] Play guitar on the street");
+            Console.WriteLine("[3] Create online content      [4] Exit");
+
+            int choice = ConsoleUtils.ReadInt("Choose a job: ");
+
             switch (choice)
             {
                 case 1:
                     {
-                        DoJob(hero, rnd, "You scammed someone, he didnt notice.", 5, 100);
+                        DoJob(hero, rnd, "You conned someone successfully", 5, 100);
                         break;
                     }
                 case 2:
                     {
-                        DoJob(hero, rnd, "You showed impressive skills, a crowd was cheering.", 5, 100);
+                        DoJob(hero, rnd, "You played an awesome set, the crowd cheered", 5, 100);
                         break;
                     }
                 case 3:
                     {
-                        DoJob(hero, rnd, "You posted some pics, people fell in love.", 5, 100);
+                        DoJob(hero, rnd, "You posted new content and gained attention", 5, 100);
                         break;
                     }
                 case 4:
                     {
-                        Console.WriteLine("cya");
+                        Console.WriteLine("Returning to menu...");
                         break;
                     }  
                 default:
                     {
-                        Console.WriteLine("1-4");
+                        Console.WriteLine("Please pick a valid option (1-4).");
                         break;
                     }    
 
@@ -56,12 +55,11 @@ namespace Game
             int earned = rnd.Next(minPay, maxPay + 1);
             hero.Money += earned;
 
-            Console.WriteLine($"You made {earned}");
-            Console.WriteLine($"wallet: {hero.Money}");
+            Console.WriteLine($"You earned: {earned:C0}");
+            Console.WriteLine($"Wallet: {hero.Money:C0}");
 
-            Thread.Sleep(1200);
-            Console.WriteLine("\nPress Enter...");
-            Console.ReadLine();
+            Thread.Sleep(900);
+            ConsoleUtils.Pause();
         }
     }
 }

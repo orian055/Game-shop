@@ -6,23 +6,11 @@ namespace Game
     {
         public void runTut(Hero hero)
         {
-            Console.WriteLine("skip intro? 1 - yes | 2 - no");
-
-            int tutorial = 0;
-            bool valid = false;
-
-            while (!valid)
+            Console.WriteLine("Skip intro? [1] Yes | [2] No");
+            int tutorial = ConsoleUtils.ReadInt("Choose: ");
+            if (tutorial != 1 && tutorial != 2)
             {
-                string input = Console.ReadLine();
-
-                if (int.TryParse(input, out tutorial) && (tutorial == 1 || tutorial == 2))
-                {
-                    valid = true;  
-                }
-                else
-                {
-                    Console.WriteLine("1 - YES | 2 - NO");
-                }
+                tutorial = 2; // default to full intro
             }
 
             
@@ -48,9 +36,9 @@ namespace Game
         Thread.Sleep(3000);
         Console.WriteLine("when you get some money you can buy stuff at the store in the forest");
         Thread.Sleep(3000);
-        Console.WriteLine("when you train you can increase your health, atk, and SWAG");
+        Console.WriteLine("during your journey to the dragon you will get increases to your health, dmg, and SWAG");
         Thread.Sleep(3000);
-        Console.WriteLine("what is SWAG? its a bar, more SWAG means more DMG");
+        Console.WriteLine("(i was too lazy to add swag meter so just think about how cool you look and shut up)");
         Thread.Sleep(3000);
         Console.WriteLine("when you gamble you cant lose, this game was made to promote gambling");
         Thread.Sleep(3000);
@@ -63,9 +51,9 @@ namespace Game
         Console.WriteLine("and thats it");
         Thread.Sleep(3000);
         Console.WriteLine("take care traveler");
-        if (!hero.passes.Contains("tutpassed"))
+        if (!hero.passes.Exists(p => p.Name == "tutpassed"))
         { 
-        hero.passes.Add("tutpassed");
+        hero.passes.Add(new Pass("tutpassed"));
         }
         }
     }

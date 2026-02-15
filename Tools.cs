@@ -4,18 +4,18 @@ namespace Game
 {
     class AdminTools
     {
-        public void Tools()
+        public void Run()
         {
             Console.WriteLine("Enter admin password:");
-            string password = Console.ReadLine();
+            string password = Console.ReadLine() ?? string.Empty;
             if (password != "yasmin")
             {
-                Console.WriteLine("fuckoff");
+                Console.WriteLine("Incorrect password.");
+                return;
             }
-            Console.WriteLine("this is a tool i made to skip all side quests");
-            Console.WriteLine("mainly for testing");
+
+            Console.WriteLine("Admin tools enabled.");
+            Console.WriteLine("This tool can be used to toggle testing features.");
         }
-        
-      
     }
 }
